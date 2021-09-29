@@ -23,7 +23,9 @@ export class VehicleService {
   }
 
   public getVehicle(id){
-    return this.http.get<any>("/api/vehicles/" + id).pipe(map(res => res))
+    // return this.http.get<any>("/api/vehicles/" + id).pipe(map(res => res))
+    var v = this.http.get<any>("/api/vehicles/" + id).pipe(map(res => res))
+    return v
   }
 
 }

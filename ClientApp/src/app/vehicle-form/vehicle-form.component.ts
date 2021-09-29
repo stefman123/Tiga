@@ -6,6 +6,7 @@ import {
   ToastNotificationInitializer
 } from '@costlydeveloper/ngx-awesome-popup';
 import { ActivatedRoute, Router } from '@angular/router';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-vehicle-form',
@@ -44,37 +45,21 @@ export class VehicleFormComponent implements OnInit {
 
   ngOnInit(): void {
 
-    if(this.vehicle.id > 0){
-      this.vehicleService.getVehicle(this.vehicle.id)
-      .subscribe( (v: any) =>{ this.vehicle =v },
-            err => 
-            {
-              if (err.status == 404)
-              this.router.navigate(['/home']);
-            })
-    };
+    forkJoin([
+      this.vehicleService.getVehicle(this.vehicle.id),
+      this.vehicleService.getMakes(),
+      this.vehicleService.getFeatures()
 
-    // this.vehicleService.getVehicle(this.vehicle.id)
-    // .subscribe(
-    //         v => {this.vehicle = v ;}, 
-    //         // err => 
-    //         // {
-    //         //   if (err.status == 404)
-    //         //   this.router.navigate(['/home']);
-    //         // }        
-    //   );
-
-    this.vehicleService.getMakes().subscribe(makes => {
-      this.makes = makes
-
-      // this.toastNotification()
-      console.log("MAKES", this.makes)
-    });
-
-    this.vehicleService.getFeatures().subscribe(features => {
-      this.features = features
-      console.log("FEATURES", this.features)
-    })
+    ]).subscribe(data => {
+      this.vehicle = data[0],
+      this.makes = data[1],
+      this.features = data[2]
+      
+      }, err => 
+        {
+          if (err.status == 404)
+          this.router.navigate(['/home']);
+        })
   }
 
   toastNotification(error: string) {

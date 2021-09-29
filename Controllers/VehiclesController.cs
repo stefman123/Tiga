@@ -73,6 +73,8 @@ namespace Tiga.Controllers
 
             var vehicle = await vehicleRepository.GetById(id);
 
+            if (vehicle == null)
+                return NotFound();
 
             if (vehicle == null)
             {
@@ -98,6 +100,10 @@ namespace Tiga.Controllers
                 return BadRequest(ModelState);
             }
             var vehicle = await tigaDbContext.Vehicles.FindAsync(id);
+            
+            if (vehicle == null)
+                return NotFound();
+
 
             tigaDbContext.Remove(vehicle);
            await tigaDbContext.SaveChangesAsync();
@@ -121,6 +127,9 @@ namespace Tiga.Controllers
             //    .SingleOrDefaultAsync( v => v.Id == id);
 
             var vehicle = await vehicleRepository.GetById(id);
+
+            if (vehicle == null)
+                return NotFound();
 
             var vehicleResource = mapper.Map<Vehicle, VehicleResource>(vehicle);
 
