@@ -1,3 +1,4 @@
+import { Vechicle } from './../models/vehicle';
 import { Component, OnInit } from '@angular/core';
 import { VehicleService } from '../services/vechicle.service';
 import { ToastyService } from '../services/toasty.service'
@@ -7,6 +8,8 @@ import {
 } from '@costlydeveloper/ngx-awesome-popup';
 import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
+import { SaveVechicle } from 'app/models/SaveVechicle';
+import * as _ from 'underscore';
 
 @Component({
   selector: 'app-vehicle-form',
@@ -17,9 +20,17 @@ export class VehicleFormComponent implements OnInit {
   makes: any[];
   models: any[];
   test: any[];
-  vehicle: any = {
-    features: [],
-    contact: {},
+  vehicle: SaveVechicle = {
+    id:0,
+    makeId: 0,
+    modelId: 0,
+    isRegistered: false,
+    features:[],
+    contact:{
+      name:'',
+      email:'',
+      phone:''
+    }
   };
   features: any[];
 
@@ -45,21 +56,33 @@ export class VehicleFormComponent implements OnInit {
 
   ngOnInit(): void {
 
-    forkJoin([
-      this.vehicleService.getVehicle(this.vehicle.id),
+    var sources = [      
       this.vehicleService.getMakes(),
-      this.vehicleService.getFeatures()
+      this.vehicleService.getFeatures() ];
 
-    ]).subscribe(data => {
-      this.vehicle = data[0],
-      this.makes = data[1],
-      this.features = data[2]
-      
+      if(this.vehicle.id)
+        sources.push( this.vehicleService.getVehicle(this.vehicle.id))
+
+    forkJoin(sources).subscribe(data => {   
+      this.makes = data[0];
+      this.features = data[1];
+      if(this.vehicle.id)
+        this.setVehicle(data[2])
+        this.populateModels();
       }, err => 
         {
           if (err.status == 404)
           this.router.navigate(['/home']);
         })
+  }
+
+  setVehicle(v:Vechicle) {
+    this.vehicle.id = v.id;
+    this.vehicle.makeId = v.make.id;
+    this.vehicle.modelId = v.model.id;
+    this.vehicle.isRegistered = v.isRegistered;
+    this.vehicle.contact = v.contact;
+    this.vehicle.features = _.pluck(v.features, 'id')
   }
 
   toastNotification(error: string) {
@@ -77,12 +100,16 @@ export class VehicleFormComponent implements OnInit {
   }
 
   onMakeChange() {
-    var selectedMake = this.makes.find(m => m.id == this.vehicle.makeId)
-    this.models = selectedMake ? selectedMake.models : [];
+    this.populateModels();
     delete this.vehicle.modelId;
 
     console.log("VEHICLE", this.vehicle)
   }
+
+private populateModels(){
+  var selectedMake = this.makes.find(m => m.id == this.vehicle.makeId)
+  this.models = selectedMake ? selectedMake.models : [];
+}
 
   onFeatureToggle(featureId, $event) {
 
@@ -100,10 +127,6 @@ export class VehicleFormComponent implements OnInit {
       .subscribe(
         x => console.log(x)
       );
-
-
-
-
   }
 
 }
