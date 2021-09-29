@@ -123,10 +123,26 @@ private populateModels(){
   }
 
   onSubmit() {
-    this.vehicleService.create(this.vehicle)
+    if(this.vehicle.id){
+      this.vehicleService.updateVehicle(this.vehicle).subscribe(x => {
+        this.toastyService.success();
+      })
+    }
+  else{
+      this.vehicleService.create(this.vehicle)
       .subscribe(
         x => console.log(x)
       );
+      }
+  }
+
+
+  delete() {
+    if(confirm("Are you sure?")){
+      this.vehicleService.deleteVehicle(this.vehicle.id).subscribe(x => {
+        this.router.navigate(['/home']);
+      });
+    }
   }
 
 }

@@ -1,11 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
+import { SaveVechicle } from 'app/models/SaveVechicle';
 
 @Injectable({
   providedIn: 'root'
 })
 export class VehicleService {
+
+  deleteVehicle(id: number) {
+   return this.http.delete('/api/vehicles/' + id).pipe(map(res => res)) ;
+  }
 
   constructor(private http: HttpClient) { }
 
@@ -27,5 +32,10 @@ export class VehicleService {
     var v = this.http.get<any>("/api/vehicles/" + id).pipe(map(res => res))
     return v
   }
+
+  updateVehicle(vehicle: SaveVechicle) {
+    return this.http.put('/api/vehicles/' + vehicle.id, vehicle).pipe(map(res => res))
+  }
+
 
 }
