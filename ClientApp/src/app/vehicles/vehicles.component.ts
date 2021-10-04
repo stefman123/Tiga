@@ -17,6 +17,13 @@ export class VehiclesComponent implements OnInit {
   query : any = {};
   faSortAmountUpAlt = faSortAmountUpAlt;
   faSortAmountDown = faSortAmountDown;
+  columns = [
+    { title: 'Id', },
+    { title: 'Contact Name', key: 'contactName', isSortable: true },
+    { title: 'Make', key: 'make', isSortable: true },
+    { title: 'Model', key: 'model', isSortable: true },
+    {}
+  ];
 
   constructor(private vehicleService: VehicleService) { }
 
