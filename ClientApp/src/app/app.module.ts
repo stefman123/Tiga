@@ -13,6 +13,7 @@ import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { VehicleFormComponent } from './vehicle-form/vehicle-form.component';
 import { VehicleService } from './services/vechicle.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+// import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
  import { trigger, state, style, animate, transition } from '@angular/animations';
 
 
@@ -23,6 +24,7 @@ import {
   ToastNotificationConfigModule
 } from '@costlydeveloper/ngx-awesome-popup';
 import { AppErrorHandler } from './app.error-handler';
+import { VehiclesComponent } from './vehicles/vehicles.component';
 
 Sentry.init({
   dsn: "https://cee69f4c26bb4254a8bcc0dc895a1fe2@o1015284.ingest.sentry.io/5980772" ,
@@ -50,7 +52,9 @@ Sentry.init({
     HomeComponent,
     CounterComponent,
     FetchDataComponent,
-    VehicleFormComponent
+    VehicleFormComponent,
+    VehiclesComponent,
+    // FontAwesomeModule
   ],
   imports: [
     BrowserAnimationsModule,
@@ -61,15 +65,16 @@ Sentry.init({
     ToastNotificationConfigModule.forRoot(),
     HttpClientModule,
     FormsModule,
+    // FontAwesomeModule,
     RouterModule.forRoot([
     { path: '', redirectTo: 'home', pathMatch: 'full' },
     { path: 'home', component: HomeComponent},
     { path: 'vehicles/new', component: VehicleFormComponent},
     { path: 'vehicles/:id', component: VehicleFormComponent },
+    { path: 'vehicles', component: VehiclesComponent },
     { path: 'counter', component: CounterComponent },
     { path: 'fetch-data', component: FetchDataComponent },
-], { relativeLinkResolution: 'legacy' })
-  ],
+], { relativeLinkResolution: 'legacy' }) ],
   providers: [{ provide: ErrorHandler, useClass: AppErrorHandler},VehicleService],
   bootstrap: [AppComponent]
 })

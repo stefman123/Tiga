@@ -1,0 +1,43 @@
+<p>vehicles works!</p>
+<div>
+    <div class="form-group card bg-dark">
+        <div class="card-body">
+            <label for="make"></label>
+            <select id="make" class="form-control" [(ngModel)]="query.makeId" (change)="OnFilterChange()">
+                <option value=""></option>
+                <option *ngFor="let m of makes" value="{{m.id}}">{{m.name}}</option>
+            </select>
+        </div>
+    </div>
+    <button class="btn btn-secondary" (click)="resetFilter()">Reset</button>
+</div>
+
+
+<table class="table">
+    <thead>
+        <tr>    
+        <th>id</th>
+          <!--<fa-icon [icon]="faCoffee"></fa-icon>-->
+        <th (click)="sortBy('make')">Make </th>
+        <th (click)="sortBy('model')">Model</th>
+        <th (click)="sortBy('contactName')">Contact Name</th>
+        <th>Vehicle Details</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let vehicle of vehicles">
+            <td>{{vehicle.id}}</td>
+            <td>{{vehicle.make.name}}</td>
+            <td>{{vehicle.model.name}}</td>
+            <td>{{vehicle.contact.name}}</td>
+            <td><a [routerLink]="['/vehicles/',vehicle.id]">
+                Details
+              </a></td>
+        </tr>
+    </tbody>
+</table>
+
+
+<!-- <ul *ngFor="let vehicle of vehicles" class="list-group"> 
+    <li class="list-group-item">{{vehicle.id}}</li>
+</ul> -->

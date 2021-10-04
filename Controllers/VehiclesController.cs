@@ -135,5 +135,34 @@ namespace Tiga.Controllers
 
             return Ok(vehicleResource);
         }
+
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllVehicles(VehicleQueryResource filterResource)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+
+           var filter = mapper.Map<VehicleQueryResource, VehicleQuery>(filterResource);
+            //var vehicle = await tigaDbContext.Vehicles
+            //    .Include(v => v.Features)
+            //        .ThenInclude(vf => vf.Feature)
+            //    .Include(m => m.Model)
+            //        .ThenInclude(m => m.Make)
+            //    .SingleOrDefaultAsync( v => v.Id == id);
+
+            var vehicle = await vehicleRepository.GetAll(filter);
+
+            if (vehicle == null)
+                return NotFound();
+
+            var filteredVehicles = vehicle;
+            var vehicleResource = mapper.Map<IEnumerable<Vehicle>, IEnumerable<VehicleResource>>(vehicle);
+
+            return Ok(vehicleResource);
+        }
     }
 }
