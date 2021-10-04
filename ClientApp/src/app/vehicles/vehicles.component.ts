@@ -2,7 +2,7 @@ import { Vechicle } from './../models/vehicle';
 import { Component, OnInit } from '@angular/core';
 import { VehicleService } from 'app/services/vechicle.service';
 import { KeyValuePair } from 'app/models/KeyValuePair';
-//import { faCoffee } from '@fortawesome/free-solid-svg-icons';
+import { faSortAmountUpAlt,faSortAmountDown  } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-vehicles',
@@ -15,7 +15,8 @@ export class VehiclesComponent implements OnInit {
 /*  allVehicles : Vechicle[];*/
   makes : KeyValuePair[];
   query : any = {};
-  //faCoffee = faCoffee;
+  faSortAmountUpAlt = faSortAmountUpAlt;
+  faSortAmountDown = faSortAmountDown;
 
   constructor(private vehicleService: VehicleService) { }
 
@@ -55,7 +56,7 @@ export class VehiclesComponent implements OnInit {
 
     if (this.query.sortBy == columnName)
     {
-      this.query.isSortAscending = false;
+      this.query.isSortAscending =!this.query.isSortAscending;
     } else {
       this.query.sortBy = columnName;
       this.query.isSortAscending = true;

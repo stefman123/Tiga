@@ -13,7 +13,7 @@ import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { VehicleFormComponent } from './vehicle-form/vehicle-form.component';
 import { VehicleService } from './services/vechicle.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-// import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
  import { trigger, state, style, animate, transition } from '@angular/animations';
 
 
@@ -54,7 +54,6 @@ Sentry.init({
     FetchDataComponent,
     VehicleFormComponent,
     VehiclesComponent,
-    // FontAwesomeModule
   ],
   imports: [
     BrowserAnimationsModule,
@@ -65,7 +64,7 @@ Sentry.init({
     ToastNotificationConfigModule.forRoot(),
     HttpClientModule,
     FormsModule,
-    // FontAwesomeModule,
+     FontAwesomeModule,
     RouterModule.forRoot([
     { path: '', redirectTo: 'home', pathMatch: 'full' },
     { path: 'home', component: HomeComponent},

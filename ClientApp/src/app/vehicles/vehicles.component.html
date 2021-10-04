@@ -17,8 +17,12 @@
     <thead>
         <tr>    
         <th>id</th>
-          <!--<fa-icon [icon]="faCoffee"></fa-icon>-->
-        <th (click)="sortBy('make')">Make </th>
+         
+        <th (click)="sortBy('make')">
+          Make
+          <fa-icon *ngIf="query.sortBy == 'make'"
+                   [icon]="(query.isSortAscending) ? faSortAmountUpAlt : faSortAmountDown"></fa-icon>
+        </th>
         <th (click)="sortBy('model')">Model</th>
         <th (click)="sortBy('contactName')">Contact Name</th>
         <th>Vehicle Details</th>
