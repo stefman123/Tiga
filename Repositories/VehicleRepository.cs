@@ -30,14 +30,18 @@ namespace Tiga.Repositories
             context.Remove(vehicle);
         }
 
-        public async Task<IEnumerable<Vehicle>> GetAll(VehicleQuery queryObj)
+        public async Task<QueryResult<Vehicle>>  GetAll(VehicleQuery queryObj)
         {
+            var queryResult = new QueryResult<Vehicle>();
+
             var query =  context.Vehicles
                     .Include(v => v.Features)
                         .ThenInclude(vf => vf.Feature)
                     .Include(m => m.Model)
                         .ThenInclude(m => m.Make).AsQueryable();
 
+          
+      
             //var columnsMap = new Dictionary<string, Expression<Func<Vehicle, object>>>
             //{
             //    { "make", v => v.Model.Make.Name },
@@ -63,6 +67,12 @@ namespace Tiga.Repositories
 
             query = query.ApplyOrdering(columnsMap, queryObj);
 
+            queryResult.TotalItems = await query.CountAsync();
+
+            query = query.ApplyPaging(queryObj);
+
+            queryResult.Items = await query.ToListAsync();
+
             //if (queryObj.IsSortAscending)
             //    query = query.OrderBy(columnsMap[queryObj.SortBy]);
             //else
@@ -78,7 +88,7 @@ namespace Tiga.Repositories
             //if (queryObj.SortBy == "id")
             //    query = (queryObj.IsSortAscending) ? query.OrderBy(v => v.Id) : query.OrderByDescending(v => v.Id);
 
-            return await query.ToListAsync();
+            return queryResult;
         }
 
  

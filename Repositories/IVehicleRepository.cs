@@ -8,7 +8,7 @@ namespace Tiga.Repositories
 {
     public interface IVehicleRepository
     {
-        Task<IEnumerable<Vehicle>> GetAll(VehicleQuery filter);
+        Task<QueryResult<Vehicle>> GetAll(VehicleQuery filter);
         Task<Vehicle> GetById(int id);
         void Create(Vehicle vehicle);
         void Update(Vehicle vehicle);

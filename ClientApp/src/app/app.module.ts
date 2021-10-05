@@ -25,6 +25,7 @@ import {
 } from '@costlydeveloper/ngx-awesome-popup';
 import { AppErrorHandler } from './app.error-handler';
 import { VehiclesComponent } from './vehicles/vehicles.component';
+import { PaginationComponent } from './shared/pagination.component';
 
 Sentry.init({
   dsn: "https://cee69f4c26bb4254a8bcc0dc895a1fe2@o1015284.ingest.sentry.io/5980772" ,
@@ -54,6 +55,7 @@ Sentry.init({
     FetchDataComponent,
     VehicleFormComponent,
     VehiclesComponent,
+    PaginationComponent
   ],
   imports: [
     BrowserAnimationsModule,

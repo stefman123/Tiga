@@ -34,7 +34,6 @@ namespace Tiga.Controllers
         [HttpPost("create")]
         public async Task<IActionResult> CreateVehicle([FromBody] SaveVehicleResource vehicleResource)
         {
-            throw new Exception();
 
             if (!ModelState.IsValid)
             {
@@ -138,31 +137,13 @@ namespace Tiga.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> GetAllVehicles(VehicleQueryResource filterResource)
+        public async Task<QueryResultResource<VehicleResource>> GetAllVehicles(VehicleQueryResource filterResource)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-
            var filter = mapper.Map<VehicleQueryResource, VehicleQuery>(filterResource);
-            //var vehicle = await tigaDbContext.Vehicles
-            //    .Include(v => v.Features)
-            //        .ThenInclude(vf => vf.Feature)
-            //    .Include(m => m.Model)
-            //        .ThenInclude(m => m.Make)
-            //    .SingleOrDefaultAsync( v => v.Id == id);
+            var queryResult = await vehicleRepository.GetAll(filter);
 
-            var vehicle = await vehicleRepository.GetAll(filter);
+            return  mapper.Map<QueryResult<Vehicle>, QueryResultResource<VehicleResource>>(queryResult);
 
-            if (vehicle == null)
-                return NotFound();
-
-            var filteredVehicles = vehicle;
-            var vehicleResource = mapper.Map<IEnumerable<Vehicle>, IEnumerable<VehicleResource>>(vehicle);
-
-            return Ok(vehicleResource);
         }
     }
 }
