@@ -6,8 +6,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Tiga.Controllers.Resources;
+using Tiga.Core;
+using Tiga.Core.Repositories;
 using Tiga.Models;
-using Tiga.Repositories;
+using Tiga.Persistence;
 
 namespace Tiga.Controllers
 {
@@ -18,12 +20,14 @@ namespace Tiga.Controllers
         private readonly TigaDbContext tigaDbContext;
 
         private readonly IVehicleRepository vehicleRepository;
+        private readonly IUnitOfWork unitOfWork;
 
-        public VehiclesController(IMapper mapper , TigaDbContext tigaDbContext, IVehicleRepository vehicleRepository )
+        public VehiclesController(IMapper mapper , TigaDbContext tigaDbContext, IVehicleRepository vehicleRepository, IUnitOfWork unitOfWork )
         {
             this.mapper = mapper;
             this.tigaDbContext = tigaDbContext;
             this.vehicleRepository = vehicleRepository;
+            this.unitOfWork = unitOfWork;
         }
 
         public IActionResult Index()
@@ -84,7 +88,7 @@ namespace Tiga.Controllers
             mapper.Map(vehicleResource,vehicle);
 
             vehicle.LastUpdate = DateTimeOffset.Now;
-            await tigaDbContext.SaveChangesAsync();
+            await unitOfWork.CompleteAsync();
 
             var result = mapper.Map<Vehicle, VehicleResource>(vehicle);
 
@@ -104,8 +108,8 @@ namespace Tiga.Controllers
                 return NotFound();
 
 
-            tigaDbContext.Remove(vehicle);
-           await tigaDbContext.SaveChangesAsync();
+           vehicleRepository.Delete(vehicle);
+           await unitOfWork.CompleteAsync();
 
             return Ok(id);
 

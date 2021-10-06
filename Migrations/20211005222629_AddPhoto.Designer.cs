@@ -10,8 +10,8 @@ using Tiga.Persistence;
 namespace Tiga.Migrations
 {
     [DbContext(typeof(TigaDbContext))]
-    [Migration("20210901104433_AddVehicles")]
-    partial class AddVehicles
+    [Migration("20211005222629_AddPhoto")]
+    partial class AddPhoto
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -77,6 +77,28 @@ namespace Tiga.Migrations
                     b.ToTable("Models");
                 });
 
+            modelBuilder.Entity("Tiga.Models.Photo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<int?>("VehicleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("VehicleId");
+
+                    b.ToTable("Photos");
+                });
+
             modelBuilder.Entity("Tiga.Models.Vehicle", b =>
                 {
                     b.Property<int>("Id")
@@ -140,6 +162,13 @@ namespace Tiga.Migrations
                     b.Navigation("Make");
                 });
 
+            modelBuilder.Entity("Tiga.Models.Photo", b =>
+                {
+                    b.HasOne("Tiga.Models.Vehicle", null)
+                        .WithMany("Photos")
+                        .HasForeignKey("VehicleId");
+                });
+
             modelBuilder.Entity("Tiga.Models.Vehicle", b =>
                 {
                     b.HasOne("Tiga.Models.Model", "Model")
@@ -178,6 +207,8 @@ namespace Tiga.Migrations
             modelBuilder.Entity("Tiga.Models.Vehicle", b =>
                 {
                     b.Navigation("Features");
+
+                    b.Navigation("Photos");
                 });
 #pragma warning restore 612, 618
         }

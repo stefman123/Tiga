@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Tiga.Core.Repositories;
 using Tiga.Extensions;
 using Tiga.Models;
 
-namespace Tiga.Repositories
+namespace Tiga.Persistence
 {
     public class VehicleRepository : IVehicleRepository
     {
@@ -20,28 +21,26 @@ namespace Tiga.Repositories
 
         public void Create(Vehicle vehicle)
         {
-            throw new NotImplementedException();
+            context.Vehicles.Add(vehicle);
         }
 
-        public void Delete(int id)
+        public void Delete(Vehicle vehicle)
         {
-            var vehicle = GetById(id);
-
             context.Remove(vehicle);
         }
 
-        public async Task<QueryResult<Vehicle>>  GetAll(VehicleQuery queryObj)
+        public async Task<QueryResult<Vehicle>> GetAll(VehicleQuery queryObj)
         {
             var queryResult = new QueryResult<Vehicle>();
 
-            var query =  context.Vehicles
+            var query = context.Vehicles
                     .Include(v => v.Features)
                         .ThenInclude(vf => vf.Feature)
                     .Include(m => m.Model)
                         .ThenInclude(m => m.Make).AsQueryable();
 
-          
-      
+
+
             //var columnsMap = new Dictionary<string, Expression<Func<Vehicle, object>>>
             //{
             //    { "make", v => v.Model.Make.Name },
@@ -91,18 +90,20 @@ namespace Tiga.Repositories
             return queryResult;
         }
 
- 
 
-        public async Task<Vehicle> GetById(int id)
+
+        public async Task<Vehicle> GetById(int id, bool includeRelated = true)
         {
-            var vehicle = await context.Vehicles
-                             .Include(v => v.Features)
-                                 .ThenInclude(vf => vf.Feature)
-                             .Include(m => m.Model)
-                                 .ThenInclude(m => m.Make)
-                             .SingleOrDefaultAsync(v => v.Id == id);
+            if (!includeRelated)
+                return await context.Vehicles.FindAsync(id);
 
-            return vehicle;
+            return await context.Vehicles
+              .Include(v => v.Features)
+                .ThenInclude(vf => vf.Feature)
+              .Include(v => v.Model)
+                .ThenInclude(m => m.Make)
+              .SingleOrDefaultAsync(v => v.Id == id);
+
         }
 
         public async Task<Vehicle> GetVehicleAsync(int id)
@@ -116,16 +117,6 @@ namespace Tiga.Repositories
                                         .SingleOrDefaultAsync(v => v.Id == id);
 
             return vehicle;
-        }
-
-        public void Save()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Update(Vehicle vehicle)
-        {
-            throw new NotImplementedException();
         }
     }
 }

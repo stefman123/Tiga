@@ -8,7 +8,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using AutoMapper;
 using System;
-using Tiga.Repositories;
+using Tiga.Core.Repositories;
+using Tiga.Persistence;
+using Tiga.Core;
 
 namespace Tiga
 {
@@ -23,7 +25,10 @@ namespace Tiga
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {   
+        {
+            services.AddScoped<IVehicleRepository, VehicleRepository>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+
             services.AddAutoMapper(typeof(Startup));
             services.AddControllersWithViews();
             // In production, the Angular files will be served from this directory
@@ -34,7 +39,7 @@ namespace Tiga
 
          
             services.AddDbContext<TigaDbContext>( options => options.UseSqlServer(Configuration.GetConnectionString("Default")));
-            services.AddScoped<IVehicleRepository, VehicleRepository>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
