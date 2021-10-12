@@ -2,9 +2,12 @@ import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { enableProdMode } from "@angular/core";
+import { platformBrowserDynamic } from "@angular/platform-browser-dynamic";
 import * as Sentry from "@sentry/angular";
-import { Integrations as TracingIntegrations } from "@sentry/tracing";
+import { Integrations } from "@sentry/tracing";
+
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
@@ -34,7 +37,7 @@ Sentry.init({
    // which automatically instruments your application to monitor its
    // performance, including custom Angular routing instrumentation
 
-   new TracingIntegrations.BrowserTracing({
+   new Integrations.BrowserTracing({
      tracingOrigins: ["localhost"],
      routingInstrumentation: Sentry.routingInstrumentation,
    }),
@@ -79,7 +82,10 @@ Sentry.init({
     { path: 'counter', component: CounterComponent },
     { path: 'fetch-data', component: FetchDataComponent },
 ], { relativeLinkResolution: 'legacy' }) ],
-  providers: [{ provide: ErrorHandler, useClass: AppErrorHandler},VehicleService, PhotoService],
+  providers: [{ provide: ErrorHandler, useClass: AppErrorHandler},   {
+    provide: Sentry.TraceService,
+    deps: [Router],
+  },VehicleService, PhotoService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
