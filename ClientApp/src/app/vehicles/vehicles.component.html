@@ -15,7 +15,7 @@
 
 <table class="table">
     <thead>
-        <tr>    
+        <tr>
         <th *ngFor="let c of columns">
           <div *ngIf="c.isSortable" (click)="sortBy(c.key)">
             {{c.title}}
@@ -41,7 +41,7 @@
         <td>{{vehicle.model.name}}</td>
 
         <td>
-          <a [routerLink]="['/vehicles/',vehicle.id]">
+          <a [routerLink]="['/vehicles/view/',vehicle.id]">
             Details
           </a>
         </td>
@@ -51,6 +51,6 @@
 <pagination [total-items]="queryResult.totalItems" [page-size]="query.pageSize" (page-changed)="onPageChange($event)"></pagination>
 
 
-<!-- <ul *ngFor="let vehicle of vehicles" class="list-group"> 
+<!-- <ul *ngFor="let vehicle of vehicles" class="list-group">
     <li class="list-group-item">{{vehicle.id}}</li>
 </ul> -->

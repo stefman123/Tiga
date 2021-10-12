@@ -131,7 +131,10 @@ private populateModels(){
   else{
       this.vehicleService.create(this.vehicle)
       .subscribe(
-        x => console.log(x)
+        x => {
+          console.log(x)
+          this.toastyService.success();
+        }
       );
       }
   }

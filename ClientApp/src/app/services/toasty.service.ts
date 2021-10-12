@@ -16,11 +16,11 @@ export class ToastyService {
 
   }
 
-  public error() {
+  public error(title:string, message: string) {
 
     this.newToastNotification = new ToastNotificationInitializer();
-    this.newToastNotification.setTitle('Error!');
-    this.newToastNotification.setMessage('Error Message');
+    this.newToastNotification.setTitle(title);
+    this.newToastNotification.setMessage(message);
 
 
     this.newToastNotification.setConfig({

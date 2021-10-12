@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import * as Sentry from "@sentry/angular";
-import { Integrations } from "@sentry/tracing";
+import { Integrations as TracingIntegrations } from "@sentry/tracing";
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
@@ -12,6 +12,7 @@ import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { VehicleFormComponent } from './vehicle-form/vehicle-form.component';
 import { VehicleService } from './services/vechicle.service';
+import { PhotoService } from './services/photo.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
  import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
  import { trigger, state, style, animate, transition } from '@angular/animations';
@@ -27,21 +28,22 @@ import { PaginationComponent } from './shared/pagination.component';
 import { VehicleViewComponent } from './vehicle-view/vehicle-view.component';
 
 Sentry.init({
-  dsn: "https://cee69f4c26bb4254a8bcc0dc895a1fe2@o1015284.ingest.sentry.io/5980772" ,
-  integrations: [
-    // Registers and configures the Tracing integration,
-    // which automatically instruments your application to monitor its
-    // performance, including custom Angular routing instrumentation
-    new Integrations.BrowserTracing({
-      tracingOrigins: ["localhost"],
-      routingInstrumentation: Sentry.routingInstrumentation,
-    }),
-  ],
+ dsn: "https://cee69f4c26bb4254a8bcc0dc895a1fe2@o1015284.ingest.sentry.io/5980772" ,
+ integrations: [
+   // Registers and configures the Tracing integration,
+   // which automatically instruments your application to monitor its
+   // performance, including custom Angular routing instrumentation
 
-  // Set tracesSampleRate to 1.0 to capture 100%
-  // of transactions for performance monitoring.
-  // We recommend adjusting this value in production
-  tracesSampleRate: 1.0,
+   new TracingIntegrations.BrowserTracing({
+     tracingOrigins: ["localhost"],
+     routingInstrumentation: Sentry.routingInstrumentation,
+   }),
+ ],
+
+ // Set tracesSampleRate to 1.0 to capture 100%
+ // of transactions for performance monitoring.
+ // We recommend adjusting this value in production
+ tracesSampleRate: 1.0,
 });
 
 
@@ -61,8 +63,8 @@ Sentry.init({
     BrowserAnimationsModule,
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     NgxAwesomePopupModule.forRoot(),
-    DialogConfigModule.forRoot(), 
-    ConfirmBoxConfigModule.forRoot(), 
+    DialogConfigModule.forRoot(),
+    ConfirmBoxConfigModule.forRoot(),
     ToastNotificationConfigModule.forRoot(),
     HttpClientModule,
     FormsModule,
@@ -77,7 +79,7 @@ Sentry.init({
     { path: 'counter', component: CounterComponent },
     { path: 'fetch-data', component: FetchDataComponent },
 ], { relativeLinkResolution: 'legacy' }) ],
-  providers: [{ provide: ErrorHandler, useClass: AppErrorHandler},VehicleService],
+  providers: [{ provide: ErrorHandler, useClass: AppErrorHandler},VehicleService, PhotoService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

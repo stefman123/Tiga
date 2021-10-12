@@ -11,6 +11,7 @@ using System;
 using Tiga.Core.Repositories;
 using Tiga.Persistence;
 using Tiga.Core;
+using Tiga.Models;
 
 namespace Tiga
 {
@@ -26,7 +27,9 @@ namespace Tiga
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<PhotoSettings>(Configuration.GetSection("PhotoSettings"));
             services.AddScoped<IVehicleRepository, VehicleRepository>();
+            services.AddScoped<IPhotoRespository, PhotoRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddAutoMapper(typeof(Startup));

@@ -36,7 +36,7 @@
           <button class="btn btn-primary" (click)="edit()" >Edit</button>
           <button *ngIf="vehicle.id" class="btn btn-danger" type="button"  (click)="delete()">Delete</button>
           <button *ngIf="vehicle.id" class="btn" type="button"  (click)="viewVehicles()">View vehicles</button>
-      </p> 
+      </p>
     </div>
 
     <div class="tab-pane" aria-labelledby="menu-tab" id="menu" role="tabpanel">
@@ -85,6 +85,11 @@
     <!-- Photos tab -->
     <div role="tabpanel" class="tab-pane" id="photos">
       <h2>Photos</h2>
+      <input type="file" (change)="uploadPhoto()" #fileInput/>
+      <img *ngFor="let photo of photos" src="/uploads/{{photo.fileName}}" class="img-thumbnail">
+      <div class="progress" *ngIf="progress > 0">
+        <div class="progress-bar" role="progressbar" [style.width.%]="progress" [style.aria-valuenow]="progress" aria-valuemin="0" aria-valuemax="100"></div>
+      </div>
     </div>
   </div>
 </div>

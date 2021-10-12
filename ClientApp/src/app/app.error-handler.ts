@@ -12,18 +12,16 @@ export class AppErrorHandler implements ErrorHandler {
   }
 
     handleError(error: any): void {
+      this.ngZone.run(()=>{
+
+        this.toastyService = this.injector.get(ToastyService);
+        this.toastyService.error('Error','An unexpected error happened.');
+
+      });
+
       if(!isDevMode())
         Sentry.captureException(error.originalError || error)
         else
         throw error;
-         
-      this.ngZone.run(()=>{
-      
-        this.toastyService = this.injector.get(ToastyService);
-        this.toastyService.error();
-    
-      });
-
- 
     }
 }
