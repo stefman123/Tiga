@@ -1,6 +1,8 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
     "baseUrl": "src",
     "module": "esnext",
     "outDir": "./dist/out-tsc",
@@ -15,6 +17,7 @@
     "lib": [
       "es2017",
       "dom"
-    ]
+    ],
+  "allowSyntheticDefaultImports": true
   }
 }

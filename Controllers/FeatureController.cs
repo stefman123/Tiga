@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 using Tiga.Models;
@@ -19,7 +20,7 @@ namespace Tiga.Controllers
         {
             return View();
         }
-
+        //[Authorize(AppPolicies.RequiredAdminRole)]
         [HttpGet("/api/Features")]
         public IEnumerable<Feature> GetFeatures()
         {

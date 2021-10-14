@@ -1,0 +1,9 @@
+{
+  "domain": "g-force.eu.auth0.com",
+  "clientId": "ECkcXUokgc7209imqKC2TNrI8oQBAcwA",
+  "audience": "https://api.tiga.com",
+  "apiUri": "http://localhost:3001",
+  "appUri": "http://localhost:5000",
+  "serverUrl": "http://localhost:5000",
+  "errorPath": "/error"
+}

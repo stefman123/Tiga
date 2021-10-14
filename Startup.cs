@@ -12,6 +12,8 @@ using Tiga.Core.Repositories;
 using Tiga.Persistence;
 using Tiga.Core;
 using Tiga.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Tiga.Controllers;
 
 namespace Tiga
 {
@@ -27,6 +29,15 @@ namespace Tiga
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.Authority = "https://g-force.eu.auth0.com/";
+                options.Audience = "https://api.tiga.com";
+            });
             services.Configure<PhotoSettings>(Configuration.GetSection("PhotoSettings"));
             services.AddScoped<IVehicleRepository, VehicleRepository>();
             services.AddScoped<IPhotoRespository, PhotoRepository>();
@@ -42,7 +53,11 @@ namespace Tiga
 
          
             services.AddDbContext<TigaDbContext>( options => options.UseSqlServer(Configuration.GetConnectionString("Default")));
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy(AppPolicies.RequiredAdminRole, policy => policy.RequireClaim("https://tiga.com/roles", "Admin"));
 
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -61,13 +76,17 @@ namespace Tiga
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+            
+            app.UseAuthentication();
+
             if (!env.IsDevelopment())
             {
                 app.UseSpaStaticFiles();
             }
 
             app.UseRouting();
-
+            app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
@@ -75,6 +94,7 @@ namespace Tiga
                     pattern: "{controller}/{action=Index}/{id?}");
             });
 
+      
             app.UseSpa(spa =>
             {
                 // To learn more about options for serving an Angular SPA from ASP.NET Core,
