@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AuthHelperService } from 'app/services/authHelper.service';
 
 @Component({
   selector: 'app-nav-menu',
@@ -7,6 +8,13 @@ import { Component } from '@angular/core';
 })
 export class NavMenuComponent {
   isExpanded = false;
+/**
+ *
+ */
+constructor(public authHelper: AuthHelperService) {
+
+
+}
 
   collapse() {
     this.isExpanded = false;

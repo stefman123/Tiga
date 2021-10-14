@@ -104,7 +104,7 @@ Sentry.init({
       { path: 'vehicles/edit/:id', component: VehicleFormComponent },
       { path: 'vehicles/view/:id', component: VehicleViewComponent },
       { path: 'vehicles', component: VehiclesComponent },
-      { path: 'admin', component: AdminComponent, canActivate: [AuthGuard], },
+      { path: 'admin', component: AdminComponent, canActivate: [AuthGuard] },
       { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
       { path: 'fetch-data', component: FetchDataComponent }],
       { relativeLinkResolution: 'legacy' })
