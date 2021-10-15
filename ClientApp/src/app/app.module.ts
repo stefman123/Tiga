@@ -36,6 +36,7 @@ import { AuthNavButtonComponent } from './Auth/AuthNavButton';
 import { ProfileComponent } from './Auth/profile/profile/profile.component';
 import { AuthGuard } from '@auth0/auth0-angular';
 import { AppHttpInterceptor } from './Interceptor';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 //import { env } from 'process';
 
 
@@ -78,6 +79,7 @@ Sentry.init({
 
   ],
   imports: [
+
     BrowserAnimationsModule,
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     NgxAwesomePopupModule.forRoot(),
@@ -87,6 +89,7 @@ Sentry.init({
     HttpClientModule,
     FormsModule,
     FontAwesomeModule,
+    NgxChartsModule,
     AuthModule.forRoot({
       domain: 'g-force.eu.auth0.com',
       clientId: 'ECkcXUokgc7209imqKC2TNrI8oQBAcwA',

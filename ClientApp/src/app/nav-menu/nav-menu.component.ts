@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AuthService } from '@auth0/auth0-angular';
 import { AuthHelperService } from 'app/services/authHelper.service';
 
 @Component({
@@ -11,7 +12,7 @@ export class NavMenuComponent {
 /**
  *
  */
-constructor(public authHelper: AuthHelperService) {
+constructor(public authHelper: AuthHelperService,public auth: AuthService) {
 
 
 }

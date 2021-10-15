@@ -11,8 +11,11 @@ export class AuthHelperService {
 
   constructor(public auth:AuthService) {
     this.readUserFromLocalStorage();
-    auth.getAccessTokenSilently().subscribe(token => this.onUserAuthenticated(token));
-   }
+    auth.isAuthenticated$.subscribe(isAuthenticated =>{
+         if(isAuthenticated)
+            auth.getAccessTokenSilently().subscribe(token => this.onUserAuthenticated(token));
+    })
+   };
 
   private onUserAuthenticated(authResult) {
     localStorage.setItem('token', authResult);
