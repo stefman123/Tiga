@@ -11,11 +11,11 @@ export class AuthHelperService {
 
   constructor(public auth:AuthService) {
     this.readUserFromLocalStorage();
-    auth.isAuthenticated$.subscribe(auth => this.onUserAuthenticated(auth) )
+    auth.getAccessTokenSilently().subscribe(token => this.onUserAuthenticated(token));
    }
 
   private onUserAuthenticated(authResult) {
-    localStorage.setItem('token', authResult.accessToken);
+    localStorage.setItem('token', authResult);
 
     this.auth.user$.subscribe( userProfile => {
 
@@ -30,11 +30,19 @@ export class AuthHelperService {
   private readUserFromLocalStorage() {
     this.profile = JSON.parse(localStorage.getItem('profile'));
 
-    var token = localStorage.getItem('Token');
+    var token = localStorage.getItem('token');
     if (token) {
-      var jwtHelper = new JwtHelperService();
-      var decodedToken = jwtHelper.decodeToken(token);
-      this.roles = decodedToken['https://tiga.com/roles'] || [];
+      var decodedToken: any;
+      if(token != "undefined"){
+         var jwtHelper = new JwtHelperService();
+        decodedToken = jwtHelper.decodeToken(token);
+        this.roles = decodedToken['https://tiga.com/roles'] || [];
+      }
+      else{
+         this.roles = [];
+      }
+
+
     }
   }
 
